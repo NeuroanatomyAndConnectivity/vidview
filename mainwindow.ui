@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>846</width>
+    <height>661</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="GLWidget" name="widget" native="true"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>846</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFiles">
+    <property name="title">
+     <string>Files</string>
+    </property>
+    <addaction name="actionOverlay"/>
+    <addaction name="actionRight_overlay"/>
+   </widget>
+   <widget class="QMenu" name="menuScreenshot">
+    <property name="title">
+     <string>Screenshot</string>
+    </property>
+    <addaction name="actionSave_screenshot"/>
+    <addaction name="actionSave_screenshot_double_reolution"/>
+   </widget>
+   <addaction name="menuFiles"/>
+   <addaction name="menuScreenshot"/>
+  </widget>
+  <action name="actionOverlay">
+   <property name="text">
+    <string>(left) overlay</string>
+   </property>
+  </action>
+  <action name="actionSave_screenshot">
+   <property name="text">
+    <string>save screenshot</string>
+   </property>
+  </action>
+  <action name="actionSave_screenshot_double_reolution">
+   <property name="text">
+    <string>save screenshot (double reolution)</string>
+   </property>
+  </action>
+  <action name="actionRight_overlay">
+   <property name="text">
+    <string>right overlay</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GLWidget</class>
+   <extends>QWidget</extends>
+   <header>glwidget.h</header>
+   <container>1</container>
+   <slots>
+    <slot>subdivide()</slot>
+    <slot>attract()</slot>
+    <slot>save()</slot>
+    <slot>stop()</slot>
+    <slot>reset()</slot>
+    <slot>brainSliderChanged(int)</slot>
+    <slot>stuffSliderChanged(int)</slot>
+    <slot>glyphSliderChanged(int)</slot>
+    <slot>radiusSliderChanged(int)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
