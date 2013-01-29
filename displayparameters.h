@@ -51,6 +51,8 @@ private slots:
 
     void on_connectivityBox_toggled(bool checked);
 
+    void on_glyphVisibilityBox_toggled(bool checked);
+
 private:
     Ui::DisplayParameters *ui;
     void setLeft(float l);

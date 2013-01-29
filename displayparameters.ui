@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>225</width>
-    <height>427</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>49</y>
+     <y>19</y>
      <width>23</width>
      <height>221</height>
     </rect>
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>280</y>
+     <y>250</y>
      <width>62</width>
      <height>23</height>
     </rect>
@@ -52,7 +52,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>49</y>
+     <y>19</y>
      <width>23</width>
      <height>221</height>
     </rect>
@@ -68,7 +68,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>280</y>
+     <y>250</y>
      <width>62</width>
      <height>23</height>
     </rect>
@@ -87,7 +87,7 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>49</y>
+     <y>19</y>
      <width>23</width>
      <height>221</height>
     </rect>
@@ -103,7 +103,7 @@
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>280</y>
+     <y>250</y>
      <width>62</width>
      <height>23</height>
     </rect>
@@ -122,7 +122,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>390</y>
+     <y>360</y>
      <width>92</width>
      <height>27</height>
     </rect>
@@ -135,7 +135,7 @@
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>390</y>
+     <y>360</y>
      <width>92</width>
      <height>27</height>
     </rect>
@@ -144,50 +144,11 @@
     <string>Save</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>20</y>
-     <width>31</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Left</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>20</y>
-     <width>31</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Right</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>20</y>
-     <width>51</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Glyphs</string>
-   </property>
-  </widget>
   <widget class="QCheckBox" name="cursorBox">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>350</y>
+     <y>320</y>
      <width>71</width>
      <height>30</height>
     </rect>
@@ -199,8 +160,8 @@
   <widget class="QCheckBox" name="rightBox_2">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>310</y>
+     <x>76</x>
+     <y>280</y>
      <width>71</width>
      <height>30</height>
     </rect>
@@ -215,9 +176,9 @@
   <widget class="QCheckBox" name="leftBox_2">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>310</y>
-     <width>71</width>
+     <x>3</x>
+     <y>280</y>
+     <width>70</width>
      <height>30</height>
     </rect>
    </property>
@@ -232,13 +193,29 @@
    <property name="geometry">
     <rect>
      <x>110</x>
-     <y>350</y>
+     <y>320</y>
      <width>111</width>
      <height>30</height>
     </rect>
    </property>
    <property name="text">
     <string>Connectivity</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="glyphVisibilityBox">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>280</y>
+     <width>71</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Glyphs</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

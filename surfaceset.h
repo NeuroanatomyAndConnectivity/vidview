@@ -32,7 +32,7 @@ public:
     void calcBoundingBox();
     Connectivity* conn;
 
-    void paintGL(int ns, bool allNodes=false, bool connect=false);
+    void paintGL(int ns, bool allNodes=false, bool connect=false, bool glyphsVisible=true);
     void paintNodes(int ns);
     void paintBufferedNodes(int ns);
     void paintConnectivity();
@@ -49,6 +49,10 @@ public:
     bool billboarding;
     bool sproject;
 
+    QSet<int> *roi;
+    void saveROI(QString filename);
+    void loadROI(QString filename);
+    void paintROI();
     int offset;
 
     QVector3D piv;

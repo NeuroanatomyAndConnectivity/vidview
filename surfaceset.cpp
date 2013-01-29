@@ -53,6 +53,8 @@ SurfaceSet::SurfaceSet(QString filename, QString consname, QString labelname)
     sproject = false;
     size = 2.0;
 
+    roi = new QSet<int>;
+
     displayList = NULL;
     updateDisplayList = false;
 
@@ -96,7 +98,7 @@ void SurfaceSet::switchSurface(int i){
     qDebug() << "surface switched to: " << cs;
 }
 
-void SurfaceSet::paintGL(int ns, bool allNodes, bool connect){
+void SurfaceSet::paintGL(int ns, bool allNodes, bool connect, bool glyphsVisible){
     qDebug() << "Surfaceset.paintGL()";
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST); //TODO: centralize that shit somewhere...
@@ -105,8 +107,9 @@ void SurfaceSet::paintGL(int ns, bool allNodes, bool connect){
         glClear(GL_DEPTH_BUFFER_BIT);
     }
     if (connect) paintConnectivity();
+    paintROI();
     glDisable(GL_LIGHTING);
-    paintBufferedNodes(ns);
+    if (glyphsVisible) paintBufferedNodes(ns);
     glEnable(GL_LIGHTING);
 }
 
@@ -124,22 +127,35 @@ void SurfaceSet::paintBufferedNodes(int ns){
 }
 
 void SurfaceSet::paintConnectivity(){
-    SConnections* ccs = scons.at(cs);
-
     glColor3f(1,0,0);
     qDebug() << "selectedIndex: " << selectedIndex;
-    qDebug() << afnis.at(0)->nodes.length();
-    for (int i = 0; i < afnis.at(0)->nodes.length(); i++){
-        float r = 20*conn->conn[i][selectedIndex];
-        if (r>0) {
-            glPointSize(r);
-            //qDebug() << i << r;
-            glBegin(GL_POINTS);
-            QVector3D p = afnis.at(cs)->nodes.at(i);
-            glVertex3f(p.x(),p.y(),p.z());
-            glEnd();
+    if (conn){
+        qDebug() << afnis.at(0)->nodes.length();
+        for (int i = 0; i < afnis.at(0)->nodes.length(); i++){
+            float r = 20*conn->conn[i][selectedIndex];
+            if (r>0) {
+                glPointSize(r);
+                //qDebug() << i << r;
+                glBegin(GL_POINTS);
+                QVector3D p = afnis.at(cs)->nodes.at(i);
+                glVertex3f(p.x(),p.y(),p.z());
+                glEnd();
+            }
         }
+    } else {
+        qDebug() << "no connectivity information available";
     }
+}
+
+void SurfaceSet::paintROI(){
+    glColor3f(0,1,0);
+    glPointSize(10);
+    glBegin(GL_POINTS);
+    for (int i = 0; i < afnis.at(0)->nodes.length(); i++){
+            QVector3D p = afnis.at(cs)->nodes.at(i);
+            if (roi->contains(i)) glVertex3f(p.x(),p.y(),p.z());
+    }
+    glEnd();
 }
 
 void SurfaceSet::paintNodes(int ns){
@@ -334,7 +350,7 @@ void SurfaceSet::calcInvRot(){
 
 void SurfaceSet::select(QVector3D v){
     selected = NULL;
-    double mindist;
+    double mindist=10000000;
     qDebug() << "select in surfset: " << v;
     QList<QVector3D> *n = &(scons.at(cs)->nodes);
     for (int i = 0; i<n->length(); i++){
@@ -354,4 +370,30 @@ void SurfaceSet::loadOverlay(QString filename){
         AFNISurface* afni = afnis.at(i);
         afni->loadOverlay(filename);
     }
+}
+
+void SurfaceSet::saveROI(QString filename){
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+    QTextStream out(&file);
+    foreach(const int &i, *roi){
+        out << i << endl;
+    }
+    file.close();
+}
+
+void SurfaceSet::loadROI(QString filename){
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+    QTextStream in(&file);
+    roi->clear();
+    while (!in.atEnd()){
+        QString nl = in.readLine();
+        if (!(nl.startsWith("#")) && !(nl=="")){
+            qDebug() << nl;
+            QStringList vals = nl.split(" ", QString::SkipEmptyParts);
+            roi->insert(vals[0].toInt());
+        }
+    }
+    file.close();
 }

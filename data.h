@@ -18,7 +18,7 @@ public:
     bool firstSort;
     int nodestyle;
 
-    bool ron, lon, connectivity;
+    bool ron, lon, connectivity, glyphsVisible;
 
     SurfaceSet* selected;
     void paintSelected();
@@ -39,7 +39,7 @@ public:
     QVector3D min();
     void paintGL(DisplayParameters* dp,bool shift=true, bool allNodes=false);
 
-    void select(QVector3D v);
+    void select(QVector3D v, bool remove=false);
 
     void setGlyphRadius(double glyphRadius);
     void setGlyphAlpha(double glyphAlpha);

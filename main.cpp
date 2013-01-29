@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     string config;
     string overlayl;
     string overlayr;
+    string view;
 
     // Declare the supported options.
     po::options_description desc("Allowed options");
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
             ("overlayr", po::value<string>(&overlayr), "Set of surfaces for the right hemisphere")
             ("scons", po::value<string>(&scons), "Connectivity (.bin) or indexed connections (.txt)")
             ("config", po::value<string>(&config), "Config file containing these here options")
+            ("view", po::value<string>(&view), "Load file with view matrix")
             ("leftalpha", po::value<float>(), "alpha value for left hemisphere")
             ("rightalpha", po::value<float>(), "alpha value for right hemisphere")
             ("glyphs", po::value<float>(), "alpha value for glyphs")
@@ -83,12 +85,14 @@ int main(int argc, char *argv[])
     QString qscons(scons.c_str());
     QString qoverlayl(overlayl.c_str());
     QString qoverlayr(overlayr.c_str());
+    QString qview(view.c_str());
     qDebug() << "loading data: " << qsurfsetl << qsurfsetr << qscons << qoverlayl << qoverlayr;
     float clipthr = 0.7;
     if (vm.count("clipthreshold")) clipthr = vm["clipthreshold"].as<float>();
     glw->loadData(qsurfsetl,qsurfsetr,qscons, qoverlayl, qoverlayr, clipthr);
     qDebug() <<   "data loaded...";
     w.show();
+    if (qview!="") glw->loadView(qview);
 
     DisplayParameters* dp = new DisplayParameters(NULL, Qt::Window);
     dp->setWindowTitle("Display Options");

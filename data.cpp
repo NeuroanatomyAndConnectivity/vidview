@@ -94,12 +94,12 @@ void Data::paintGL(DisplayParameters* dp, bool shift, bool allNodes){
     glEnable(GL_LIGHTING);
     glShadeModel(GL_SMOOTH);
 
-    if (surfset&&lon) surfset->paintGL(nodestyle, allNodes, connectivity);
-    if (surfsetr&&ron) surfsetr->paintGL(nodestyle, allNodes, connectivity);
+    if (surfset&&lon) surfset->paintGL(nodestyle, allNodes, connectivity, glyphsVisible);
+    if (surfsetr&&ron) surfsetr->paintGL(nodestyle, allNodes, connectivity, glyphsVisible);
 
 }
 
-void Data::select(QVector3D v){
+void Data::select(QVector3D v, bool remove){
     float dist;
     if (surfset) {
         surfset->select(v);
@@ -113,6 +113,17 @@ void Data::select(QVector3D v){
         if ((v-*rsel).length() < dist){
             center = surfsetr->selected;
             selected = surfsetr;
+        }
+    }
+    if (!remove) {
+        if (selected) {
+            selected->roi->insert(selected->selectedIndex);
+            qDebug() << "adding: " << selected->selectedIndex;
+        }
+    } else {
+        if (selected) {
+            selected->roi->remove(selected->selectedIndex);
+            qDebug() << "removing: " << selected->selectedIndex;
         }
     }
 }

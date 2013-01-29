@@ -118,6 +118,7 @@ void GLWidget::setView(){
 
     glMultMatrixf(view);
 
+    //This is only for initialization...
     if (o=="i"){
         glRotatef(180,0,1,0);
     }
@@ -240,7 +241,7 @@ bool GLWidget::select(QMouseEvent *event){
         QVector3D repro = inv2.map(sp);
         //qDebug() << sp;
         world = inv.map(repro);
-        data->select(world);
+        data->select(world, event->modifiers()&Qt::AltModifier);
 
         int s = data->selected->selectedIndex;
 
@@ -478,6 +479,8 @@ void GLWidget::updateParameters(){
     qDebug() << "ron: " << data->ron;
     b = dp->findChild<QCheckBox*>("connectivityBox");
     data->connectivity = b->isChecked();
+    b = dp->findChild<QCheckBox*>("glyphVisibilityBox");
+    data->glyphsVisible = b->isChecked();
     emit dataChanged();
     updateGL();
 }
@@ -485,4 +488,76 @@ void GLWidget::updateParameters(){
 void GLWidget::updateNode(int i){
     QMutexLocker locker(&mutex);
     qDebug() << "updateNode: " << i;
+}
+
+void GLWidget::saveView(QString filename){
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+    QTextStream out(&file);
+    for (int i = 0; i<16; i++){
+        out << view[i] << endl;
+    }
+    out << scale;
+    file.close();
+}
+
+void GLWidget::loadView(QString filename){
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+    QTextStream in(&file);
+    for (int i = 0; i<16; i++){
+        in >> view[i];
+    }
+    in >> scale;
+    file.close();
+}
+
+void GLWidget::orient(QString ori){
+    if (ori=="i") {
+        glLoadIdentity();
+        glRotatef(180,0,1,0);
+        glGetFloatv(GL_MODELVIEW_MATRIX, view);
+        o = "";
+    }
+
+    if (ori=="a") {
+        glLoadIdentity();
+        glRotatef(90,0,1,0);
+        glRotatef(-90,1,0,0);
+        glRotatef(90,0,0,1);
+        glGetFloatv(GL_MODELVIEW_MATRIX, view);
+        o = "";
+    }
+
+    if (ori=="p") {
+        glLoadIdentity();
+        glRotatef(90,0,1,0);
+        glRotatef(-90,1,0,0);
+        glRotatef(-90,0,0,1);
+        glGetFloatv(GL_MODELVIEW_MATRIX, view);
+        o = "";
+    }
+
+    if (ori=="l") {
+        glLoadIdentity();
+        glRotatef(90,0,1,0);
+        glRotatef(-90,1,0,0);
+        glGetFloatv(GL_MODELVIEW_MATRIX, view);
+        o = "";
+    }
+
+    if (ori=="r") {
+        glLoadIdentity();
+        glRotatef(-90,0,1,0);
+        glRotatef(-90,1,0,0);
+        glGetFloatv(GL_MODELVIEW_MATRIX, view);
+        o = "";
+    }
+
+    if (ori=="s") {
+        glLoadIdentity();
+        glGetFloatv(GL_MODELVIEW_MATRIX, view);
+        o = "";
+    }
+
 }

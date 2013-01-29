@@ -133,3 +133,8 @@ void DisplayParameters::on_connectivityBox_toggled(bool checked)
 {
     emit changed();
 }
+
+void DisplayParameters::on_glyphVisibilityBox_toggled(bool checked)
+{
+    emit changed();
+}

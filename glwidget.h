@@ -35,7 +35,12 @@ public:
 
     GLfloat* view;
 
+    void saveView(QString filename);
+    void loadView(QString filename);
    //SUMAInterface* si;
+    void orient(QString ori);
+
+    float bg;
 
 protected:
     void initializeGL();
@@ -62,12 +67,12 @@ private:
     DisplayParameters* dp;
 
     double scale;
-    float bg;
     bool select(QMouseEvent *event);
-    QString o; //for the command line orientation (iaplr, with s being the default)
     bool screen, cursor;
 
     mutable QMutex mutex;
+
+    QString o; //for the command line orientation (iaplr, with s being the default)
 
 public slots:
     void screenshot(QString name, double resolution=1);

@@ -35,6 +35,12 @@
     </property>
     <addaction name="actionOverlay"/>
     <addaction name="actionRight_overlay"/>
+    <addaction name="actionSave_left_ROI"/>
+    <addaction name="actionSave_right_ROI"/>
+    <addaction name="actionLoad_left_ROI"/>
+    <addaction name="actionLoad_right_ROI"/>
+    <addaction name="actionClear_left_ROI"/>
+    <addaction name="actionClear_Right_ROI"/>
    </widget>
    <widget class="QMenu" name="menuScreenshot">
     <property name="title">
@@ -43,12 +49,27 @@
     <addaction name="actionSave_screenshot"/>
     <addaction name="actionSave_screenshot_double_reolution"/>
    </widget>
+   <widget class="QMenu" name="menuViews">
+    <property name="title">
+     <string>Views</string>
+    </property>
+    <addaction name="actionLeft"/>
+    <addaction name="actionRight"/>
+    <addaction name="actionSuperior"/>
+    <addaction name="actionInferior"/>
+    <addaction name="actionAnterior"/>
+    <addaction name="actionPosterior"/>
+    <addaction name="actionSave_view"/>
+    <addaction name="actionLoad_view"/>
+    <addaction name="actionChange_background_color"/>
+   </widget>
    <addaction name="menuFiles"/>
    <addaction name="menuScreenshot"/>
+   <addaction name="menuViews"/>
   </widget>
   <action name="actionOverlay">
    <property name="text">
-    <string>(left) overlay</string>
+    <string>load left overlay</string>
    </property>
   </action>
   <action name="actionSave_screenshot">
@@ -63,7 +84,82 @@
   </action>
   <action name="actionRight_overlay">
    <property name="text">
-    <string>right overlay</string>
+    <string>load right overlay</string>
+   </property>
+  </action>
+  <action name="actionLeft">
+   <property name="text">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actionRight">
+   <property name="text">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionSuperior">
+   <property name="text">
+    <string>Superior</string>
+   </property>
+  </action>
+  <action name="actionInferior">
+   <property name="text">
+    <string>Inferior</string>
+   </property>
+  </action>
+  <action name="actionAnterior">
+   <property name="text">
+    <string>Anterior</string>
+   </property>
+  </action>
+  <action name="actionPosterior">
+   <property name="text">
+    <string>Posterior</string>
+   </property>
+  </action>
+  <action name="actionSave_view">
+   <property name="text">
+    <string>Save view</string>
+   </property>
+  </action>
+  <action name="actionLoad_view">
+   <property name="text">
+    <string>Load view</string>
+   </property>
+  </action>
+  <action name="actionChange_background_color">
+   <property name="text">
+    <string>Change background color</string>
+   </property>
+  </action>
+  <action name="actionSave_left_ROI">
+   <property name="text">
+    <string>save left ROI</string>
+   </property>
+  </action>
+  <action name="actionSave_right_ROI">
+   <property name="text">
+    <string>save right ROI</string>
+   </property>
+  </action>
+  <action name="actionLoad_left_ROI">
+   <property name="text">
+    <string>load left ROI</string>
+   </property>
+  </action>
+  <action name="actionLoad_right_ROI">
+   <property name="text">
+    <string>load right ROI</string>
+   </property>
+  </action>
+  <action name="actionClear_left_ROI">
+   <property name="text">
+    <string>clear left ROI</string>
+   </property>
+  </action>
+  <action name="actionClear_Right_ROI">
+   <property name="text">
+    <string>clear Right ROI</string>
    </property>
   </action>
  </widget>
