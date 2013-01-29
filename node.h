@@ -13,14 +13,10 @@ public:
     //List, because a node can be connected to the same cluster multiple times...
     QList<int> clustergroups;
 
-    //List of edges connected to this node
+    //List of edges connected to this node for references between diff. surfaces: Original ordering
     QList<Connection*> ncs;
     //sorted Edges
     QList<Connection*> sncs;
-    //QList<int> unsortedIndices;
-    int connectionsOver(double threshold);
-
-    //TODO: Take surface information into account, if present
 
     QVector3D normal;
 

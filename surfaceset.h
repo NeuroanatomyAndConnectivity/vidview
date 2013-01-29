@@ -36,7 +36,7 @@ public:
     void paintNodes(int ns);
     void paintBufferedNodes(int ns);
     void paintConnectivity();
-    double glyphAlpha, glyphRadius, threshold;
+    double glyphAlpha, glyphRadius, threshold, minlength;
     void setGlyphAlpha(double a);
     void setGlyphRadius(double r);
     QMatrix4x4* viewMatrix();
@@ -47,7 +47,6 @@ public:
     bool clear_depth;
     bool vectors;
     bool billboarding;
-    bool sproject;
 
     QSet<int> *roi;
     void saveROI(QString filename);

@@ -16,7 +16,7 @@ public:
     explicit GlyphEditor(QWidget *parent = 0, Qt::WindowFlags f = 0);
     ~GlyphEditor();
 
-    float threshold, radius, normalization, size;
+    float threshold, radius, normalization, size, minlength;
     int display, color, geometry, glyphstyle, primitives;
 
     void setThreshold(float value);
@@ -28,7 +28,7 @@ public:
     void setGeometry(int g);
     void setGlyphstyle(int g);
     void setPrimitives(int p);
-
+    void setMinlength(float value);
 
     void initParams();
     void setData(Data* data, DisplayParameters* dp);
@@ -74,6 +74,10 @@ private slots:
     void on_loadButton_clicked();
 
     void on_updateBox_toggled(bool checked);
+
+    void on_minlengthSlider_valueChanged(int value);
+
+    void on_minlengthBox_valueChanged(double arg1);
 
 signals:
     void changed();

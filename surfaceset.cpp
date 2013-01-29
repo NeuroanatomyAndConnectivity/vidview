@@ -47,10 +47,10 @@ SurfaceSet::SurfaceSet(QString filename, QString consname, QString labelname)
     glyphAlpha = 1;
     glyphRadius = 1;
     threshold = 1;
+    minlength = 0;
     clear_depth = false;
     vectors = false;
     billboarding = false;
-    sproject = false;
     size = 2.0;
 
     roi = new QSet<int>;
@@ -152,8 +152,8 @@ void SurfaceSet::paintROI(){
     glPointSize(10);
     glBegin(GL_POINTS);
     for (int i = 0; i < afnis.at(0)->nodes.length(); i++){
-            QVector3D p = afnis.at(cs)->nodes.at(i);
-            if (roi->contains(i)) glVertex3f(p.x(),p.y(),p.z());
+        QVector3D p = afnis.at(cs)->nodes.at(i);
+        if (roi->contains(i)) glVertex3f(p.x(),p.y(),p.z());
     }
     glEnd();
 }
@@ -161,12 +161,11 @@ void SurfaceSet::paintROI(){
 void SurfaceSet::paintNodes(int ns){
 
     calcInvRot();
-
     SConnections* ccs = scons.at(cs);
-
     glPointSize(qMax(size,0.1));  //does not like 0 for pointsize...
     glLineWidth(size);
 
+    //for all nodes in the current surface...
     for (int i = 0; i < ccs->dn.length(); i++){
         Node* p = (Node*)(&ccs->dn.at(i));
         QVector3D nnormal = p->normal.normalized();
@@ -174,108 +173,61 @@ void SurfaceSet::paintNodes(int ns){
         QVector3D mapped = view->mapVector(nnormal);
         QVector3D mappedp = view->map(p->p);
 
-        bool visible = mapped.z() > 0;
-        //visible = true;
-        //additionally: compare depth buffer after surface draw?
+        bool visible = mapped.z() > 0; //normal points to camera
         //TODO: poor guys clipping, should take ar into account...
         double clip = 1;
-        visible &= (mappedp.x()>-clip);
-        visible &= (mappedp.x()<clip);
-        visible &= (mappedp.y()>-clip);
-        visible &= (mappedp.y()<clip);
+        visible &= (mappedp.x()>-clip)&&(mappedp.x()<clip)&&(mappedp.y()>-clip)&&(mappedp.y()<clip);
 
         if (visible) {
-
-        int cOver = p->connectionsOver(threshold); //How many connections have a value above the threshold?
-        int nth = 0; //the how-manieth connection for the pie chart...
-
-        QVector3D zshift = glyphRadius*invRotZ;
-        if (ns==4) {
-            //pie charts
-            glShadeModel(GL_FLAT);
-            glBegin(GL_TRIANGLE_FAN);
-            glVertex3f(p->p.x()+zshift.x(),p->p.y()+zshift.y(),p->p.z()+zshift.z());
-        }
-
-        QVector3D pieClosePoint;
-        float cr,cg,cb;
-
-        for (int j=0; j<p->ncs.length();j++){
-            Connection* e = p->ncs.at(j);
-            QVector3D diff; //scaled vector from current point to point on the other side:
-            //in the createPrims method, edges are connected to the nodes with fn == n.p:
-            Connection* diffc = ((Node*)(&scons.at(geo)->dn.at(i)))->ncs.at(j);
-            diff = diffc->tn-diffc->fn;
-            diff = diff*glyphRadius/100.0;
-
-            bool draw = true;
-
-            Node* colorNode = (Node*)(&scons.at(colorsFrom)->dn.at(i));
-            Connection* c = colorNode->ncs.at(j);
-            if (c->v < threshold) draw=false;
-            glColor4f(c->r,c->g,c->b,glyphAlpha);
-
-            //if (nor.length()>50){
-
-                QVector3D p_shifted;
-
-                p_shifted = p->p + diff;
-
-
+            //How many connections have a value above the threshold?
+            //TODO: Change p to whatever makes sense, make conditional on pies? move?
+            int cOver = 0;
+            for (int count = 0; count < p->sncs.length(); count++){
+                if ((p->sncs.at(count)->v > threshold)) cOver++;
+            }
+            int nth = 0; //the how-manieth drawn connection for the pie chart...
+            QVector3D zshift = glyphRadius*invRotZ;
+            if (ns==4) {
+                //pie charts
+                glShadeModel(GL_FLAT);
+                glBegin(GL_TRIANGLE_FAN);
+                glVertex3f(p->p.x()+zshift.x(),p->p.y()+zshift.y(),p->p.z()+zshift.z());
+            }
+            QVector3D pieClosePoint;
+            float cr,cg,cb;
+            //TODO: Wouldn't iterating through ALL nodes and indexing be easier, taking the number of nodes now into account?
+            for (int j=0; j<p->ncs.length();j++){
+                //scaled vector from current point to point on the other side: edges are now connected to the nodes with fn == n.p
+                Connection* diffc = ((Node*)(&scons.at(geo)->dn.at(i)))->ncs.at(j);
+                QVector3D diff = (diffc->tn-diffc->fn) * glyphRadius/100.0;
+                Node* colorNode = (Node*)(&scons.at(colorsFrom)->dn.at(i));
+                Connection* c = colorNode->ncs.at(j);
+                glColor4f(c->r,c->g,c->b,glyphAlpha);
+                bool draw = !((c->v < threshold));
                 if (billboarding && (ns==6)) {
-
-                    //TODO: check, this used to be es...
-                    p_shifted = diffc->tn;
-
-                    QVector2D xy(p_shifted.x(),p_shifted.y());
+                    //TODO: check, this used to be restricted to spherical...
+                    diff = diffc->tn;
+                    QVector2D xy(diff.x(),diff.y());
                     xy /= 100;
                     xy.normalize();
-                    double l = p_shifted.z()/2.0+0.5;
+                    double l = diff.z()/2.0+0.5;
                     xy *= l*glyphRadius/100;
-                    //l = qPow(l,2);
-                    p_shifted = p->p;
-                    p_shifted += xy.x()*invRotX;
-                    p_shifted += xy.y()*invRotY;
+                    diff = xy.x()*invRotX + xy.y()*invRotY;
                 }
-
-                Connection* pieEdge;
-                float rad;
+                Connection* pieEdge = colorNode->sncs.at(j);
                 if (ns==4) {
                     //pie charts
-
                     //TODO: redundant:
-                    pieEdge = colorNode->sncs.at(j);
-
-                    if (pieEdge->v > threshold){
-
+                    if ((pieEdge->v > threshold)) {
                         glColor4f(pieEdge->r,pieEdge->g,pieEdge->b,glyphAlpha);
                         //float t = (j/(float)p->ncs.length())*2*M_PI;
                         float t = (nth/(float)cOver)*2*M_PI;
                         nth++;
-
-                       /* if (norm==1){
-                            //rad = 0.1*glyphRadius*qSqrt(p->ncs.length());
-                            rad = 0.1*glyphRadius*qSqrt(cOver);
-                        } else if (norm==2) {
-                            rad = glyphRadius;
-                        } else if (norm==3) {
-                            //rad = glyphRadius*(20+qSqrt(p->ncs.length()))/40.0;
-                            rad = glyphRadius*(20+qSqrt(cOver))/40.0;
-                        }*/
-
-                        rad = norm*glyphRadius + (1-norm)*glyphRadius*qSqrt(cOver)/10.0;
-
-                        p_shifted = p->p;
-                        p_shifted += rad*qSin(t)*invRotX;
-                        p_shifted += rad*qCos(t)*invRotY;
+                        float rad = norm*glyphRadius + (1-norm)*glyphRadius*qSqrt(cOver)/10.0;
+                        diff = rad*qSin(t)*invRotX + rad*qCos(t)*invRotY;
                     }
                 }
-
-                if (sproject){
-                    double dprod = QVector3D::dotProduct(diff,nnormal);
-                        p_shifted = p_shifted - (nnormal*dprod);
-                }
-
+                QVector3D p_shifted = p->p + diff;
                 //TODO: There is no more reason that this stuff couldn't go further up? Also: The flow here is seriously off...
                 if (!vectors){
                     glBegin(GL_POINTS);
@@ -284,7 +236,7 @@ void SurfaceSet::paintNodes(int ns){
                     if (draw) glVertex3d(p->p.x()+zshift.x(),p->p.y()+zshift.y(),p->p.z()+zshift.z());
                 }
                 if (ns==4) {
-                    draw = (pieEdge->v > threshold);
+                    draw = ((pieEdge->v > threshold));
                     if ((nth==1)&draw) {
                         cr = pieEdge->r;
                         cg = pieEdge->g;
@@ -294,14 +246,14 @@ void SurfaceSet::paintNodes(int ns){
                 }
                 if (draw) glVertex3d(p_shifted.x()+zshift.x(),p_shifted.y()+zshift.y(),p_shifted.z()+zshift.z());
                 if (ns!=4) glEnd();
-            //}
-        }
-        //TODO: deal with two/one point issue...
-        if (ns==4) {
-            glColor4f(cr,cg,cb,glyphAlpha);
-            glVertex3f(pieClosePoint.x(),pieClosePoint.y(),pieClosePoint.z());
-            glEnd();
-        }
+            }
+
+            //TODO: deal with two/one point issue...
+            if (ns==4) {
+                glColor4f(cr,cg,cb,glyphAlpha);
+                glVertex3f(pieClosePoint.x(),pieClosePoint.y(),pieClosePoint.z());
+                glEnd();
+            }
         }
     }
 }

@@ -56,10 +56,3 @@ void Node::calcMatrix() {
     glMultMatrixf(mat);
 }
 
-int Node::connectionsOver(double threshold){
-    int n = 0;
-    for (int i = 0; i < sncs.length(); i++){
-        if (sncs.at(i)->v > threshold) n++;
-    }
-    return n;
-}

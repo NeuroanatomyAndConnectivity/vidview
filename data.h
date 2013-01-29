@@ -45,6 +45,7 @@ public:
     void setGlyphAlpha(double glyphAlpha);
     void setThreshold(double stuffAlpha);
     void setAlpha(double brainAlpha);
+    void setMinlength(double minlength);
 
     int selectedIndex;
     void setSelectedIndex(int i);

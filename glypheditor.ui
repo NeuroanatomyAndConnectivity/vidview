@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
+    <width>521</width>
     <height>752</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>20</x>
      <y>10</y>
-     <width>421</width>
+     <width>491</width>
      <height>361</height>
     </rect>
    </property>
@@ -28,7 +28,7 @@
     <rect>
      <x>20</x>
      <y>400</y>
-     <width>121</width>
+     <width>101</width>
      <height>91</height>
     </rect>
    </property>
@@ -83,7 +83,7 @@
     <rect>
      <x>20</x>
      <y>490</y>
-     <width>101</width>
+     <width>91</width>
      <height>71</height>
     </rect>
    </property>
@@ -291,13 +291,13 @@
     </rect>
    </property>
    <property name="text">
-    <string>Primitive Size</string>
+    <string>Prim. Size</string>
    </property>
   </widget>
   <widget class="QComboBox" name="colorBox">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>190</x>
      <y>660</y>
      <width>141</width>
      <height>27</height>
@@ -307,7 +307,7 @@
   <widget class="QComboBox" name="displayBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>40</x>
      <y>660</y>
      <width>141</width>
      <height>27</height>
@@ -317,7 +317,7 @@
   <widget class="QComboBox" name="geoBox">
    <property name="geometry">
     <rect>
-     <x>310</x>
+     <x>340</x>
      <y>660</y>
      <width>141</width>
      <height>27</height>
@@ -327,7 +327,7 @@
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>80</x>
      <y>690</y>
      <width>51</width>
      <height>17</height>
@@ -340,7 +340,7 @@
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>240</x>
      <y>690</y>
      <width>41</width>
      <height>17</height>
@@ -353,7 +353,7 @@
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>380</x>
      <y>690</y>
      <width>67</width>
      <height>17</height>
@@ -366,7 +366,7 @@
   <widget class="QPushButton" name="loadButton">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>160</x>
      <y>720</y>
      <width>92</width>
      <height>27</height>
@@ -379,7 +379,7 @@
   <widget class="QPushButton" name="saveButton">
    <property name="geometry">
     <rect>
-     <x>220</x>
+     <x>260</x>
      <y>720</y>
      <width>92</width>
      <height>27</height>
@@ -392,7 +392,7 @@
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>230</x>
      <y>640</y>
      <width>61</width>
      <height>17</height>
@@ -425,6 +425,48 @@
    </property>
    <property name="autoRepeat">
     <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>600</y>
+     <width>80</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Min. Length</string>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="minlengthBox">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>570</y>
+     <width>62</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <double>100.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.100000000000000</double>
+   </property>
+  </widget>
+  <widget class="QSlider" name="minlengthSlider">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>400</y>
+     <width>19</width>
+     <height>160</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
    </property>
   </widget>
  </widget>

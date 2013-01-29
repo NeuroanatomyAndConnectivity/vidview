@@ -147,6 +147,11 @@ void Data::setAlpha(double brainAlpha){
     if (surfr) surfr->setAlpha(brainAlpha);
 }
 
+void Data::setMinlength(double minlength){
+    if (surfset) surfset->minlength = minlength;
+    if (surfsetr) surfsetr->minlength = minlength;
+}
+
 void Data::switchToSurface(int i){
     qDebug() << "switching l";
     if (surfset) {

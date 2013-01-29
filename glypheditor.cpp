@@ -73,6 +73,16 @@ void GlyphEditor::setThreshold(float value){
     update();
 }
 
+void GlyphEditor::setMinlength(float value){
+    minlength = value;
+    QDoubleSpinBox* b = findChild<QDoubleSpinBox*>("minlengthBox");
+    b->setValue(minlength);
+    QSlider* s = findChild<QSlider*>("minlengthSlider");
+    s->setValue(minlength);
+    data->setMinlength(minlength);
+    update();
+}
+
 void GlyphEditor::setNormalization(float value){
     normalization = value;
     QDoubleSpinBox* b = findChild<QDoubleSpinBox*>("normBox");
@@ -214,6 +224,16 @@ void GlyphEditor::on_sizeSlider_valueChanged(int value)
 void GlyphEditor::on_sizeBox_valueChanged(double value)
 {
     setSize(value);
+}
+
+void GlyphEditor::on_minlengthSlider_valueChanged(int value)
+{
+    setMinlength(value);
+}
+
+void GlyphEditor::on_minlengthBox_valueChanged(double value)
+{
+    setMinlength(value);
 }
 
 void GlyphEditor::on_geometry_toggled(bool checked)
