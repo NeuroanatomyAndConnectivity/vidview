@@ -47,7 +47,6 @@ Data::Data(QString ssl, QString ssr, QString scons, QString gradientnamel, QStri
    } else {
        if (surfset){
            qDebug() << "only left surface";
-          // surfset->createConnections(surfset->afnis.at(surfset->cs),new IndexedConnections(arg("scons")));
            coll = new SurfaceCollection(scons,surfset,NULL,clipthr);
            qDebug() << "done";
        }
@@ -99,7 +98,7 @@ void Data::paintGL(DisplayParameters* dp, bool shift, bool allNodes){
 
 }
 
-void Data::select(QVector3D v, bool remove){
+void Data::select(QVector3D v, Qt::KeyboardModifiers modifiers){
     float dist;
     if (surfset) {
         surfset->select(v);
@@ -115,12 +114,12 @@ void Data::select(QVector3D v, bool remove){
             selected = surfsetr;
         }
     }
-    if (!remove) {
+    if (modifiers & Qt::AltModifier) {
         if (selected) {
             selected->roi->insert(selected->selectedIndex);
             qDebug() << "adding: " << selected->selectedIndex;
         }
-    } else {
+    } else if (modifiers & Qt::ShiftModifier) {
         if (selected) {
             selected->roi->remove(selected->selectedIndex);
             qDebug() << "removing: " << selected->selectedIndex;

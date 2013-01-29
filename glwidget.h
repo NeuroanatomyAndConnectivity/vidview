@@ -76,7 +76,6 @@ private:
 
 public slots:
     void screenshot(QString name, double resolution=1);
-    QString arg(QString argname);
     void updateParameters();
     void updateNode(int i);
 

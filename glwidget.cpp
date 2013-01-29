@@ -8,15 +8,6 @@
 
 #include "afnisurface.h"
 
-QString GLWidget::arg(QString argname) {
-    int nodespos = qApp->arguments().indexOf(QRegExp("-"+argname+"*"));
-    if (nodespos!=-1 && nodespos!=qApp->arguments().length()-1) {
-        return qApp->arguments().at(nodespos+1);
-    } else {
-        return "";
-    }
-}
-
 GLWidget::GLWidget(QWidget *parent, const QGLWidget * shareWidget, Qt::WindowFlags f)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, shareWidget, f)
 {
@@ -27,7 +18,7 @@ GLWidget::GLWidget(QWidget *parent, const QGLWidget * shareWidget, Qt::WindowFla
 
     screen = false;
 
-    o = arg("orientation");
+    //o = arg("orientation");
 
     view = new GLfloat[16];
 
@@ -35,6 +26,8 @@ GLWidget::GLWidget(QWidget *parent, const QGLWidget * shareWidget, Qt::WindowFla
     bg = 1;
 
     process = new QProcess();
+
+    setFocusPolicy(Qt::StrongFocus);
 
     qDebug("widget created");
 }
@@ -241,7 +234,7 @@ bool GLWidget::select(QMouseEvent *event){
         QVector3D repro = inv2.map(sp);
         //qDebug() << sp;
         world = inv.map(repro);
-        data->select(world, event->modifiers()&Qt::AltModifier);
+        data->select(world, event->modifiers());
 
         int s = data->selected->selectedIndex;
 
@@ -315,14 +308,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event) {
             bg =1;
         }
     }
-
-    if (event->key() == Qt::Key_1) data->nodestyle = 1;
-    if (event->key() == Qt::Key_2) data->nodestyle = 2;
-    if (event->key() == Qt::Key_3) data->nodestyle = 3;
-    if (event->key() == Qt::Key_4) data->nodestyle = 4;
-    if (event->key() == Qt::Key_5) data->nodestyle = 5;
-    if (event->key() == Qt::Key_6) data->nodestyle = 6;
-    qDebug() << data->nodestyle;
     if (event->key() == Qt::Key_T) screenshot("test.png");
     if (event->key() == Qt::Key_F) {
         if (this->window()->isFullScreen()) {
@@ -382,61 +367,17 @@ void GLWidget::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_B){
         if (data->surfset) {
             qDebug() << "switching surface";
-            data->surfset->switchSurface(2);
-            data->surfl = data->surfset->surfs.at(data->surfset->cs);
+            data->surfset->switchSurface();
         }
         if (data->surfsetr) {
             qDebug() << "switching surface r";
-            data->surfsetr->switchSurface(2);
-            data->surfr = data->surfsetr->surfs.at(data->surfsetr->cs);
+            data->surfsetr->switchSurface();
         }
 
     }
     if (event->key() == Qt::Key_G){
         if (data->surfset) {
             data->surfset->clear_depth = !data->surfset->clear_depth;
-        }
-    }
-    if (event->key() == Qt::Key_H){
-        if (data->surfset) {
-            data->surfset->vectors = !data->surfset->vectors;
-            qDebug() << "vectors: " << data->surfset->vectors;
-        }
-    }
-    if (event->key() == Qt::Key_J){
-        if (data->surfset!=NULL) {
-            data->surfset->billboarding = !data->surfset->billboarding;
-            qDebug() << "billboarding: " << data->surfset->billboarding;
-        }
-    }
-    if (event->key() == Qt::Key_K){
-        if (data->surfset) {
-            data->surfset->sproject = !data->surfset->sproject;
-            qDebug() << "sproject: " << data->surfset->sproject;
-        }
-    }
-    if (event->key() == Qt::Key_X){
-        if (data->surfset) {
-            data->surfset->colorsFrom = (data->surfset->colorsFrom+1)%data->surfset->afnis.length();
-        }
-    }
-    if (event->key() == Qt::Key_Y){
-        if (data->surfset) {
-            data->surfset->norm++;
-            if (data->surfset->norm==4) {
-                data->surfset->norm = 1;
-            }
-        }
-    }
-    if (event->key() == Qt::Key_V){
-        if (data->surfset) {
-            data->surfset->geo = (data->surfset->geo+1)%data->surfset->afnis.length();
-            qDebug() << data->surfset->geo;
-        }
-    }
-    if (event->key() == Qt::Key_Z){
-        if (data->surfset) {
-            data->surfset->updateDisplayList = true;
         }
     }
     emit dataChanged();

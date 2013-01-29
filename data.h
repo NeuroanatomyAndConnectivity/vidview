@@ -39,7 +39,7 @@ public:
     QVector3D min();
     void paintGL(DisplayParameters* dp,bool shift=true, bool allNodes=false);
 
-    void select(QVector3D v, bool remove=false);
+    void select(QVector3D v, Qt::KeyboardModifiers modifiers);
 
     void setGlyphRadius(double glyphRadius);
     void setGlyphAlpha(double glyphAlpha);
