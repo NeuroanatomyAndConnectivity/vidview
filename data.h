@@ -29,6 +29,7 @@ public:
     void geoFrom(int i);
     void setNormalization(float n);
     void setSize(float s);
+    void minlFrom(int minlSource);
 
     QVector3D* center;
     SurfaceCollection* coll;

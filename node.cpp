@@ -30,6 +30,13 @@ bool edgeCompare(Connection* e1, Connection* e2){
     //return c1.valueF() > c2.valueF();
 }
 
+void Node::indexCons(){
+    for (int i = 0; i<ncs.length(); i++){
+        ncs.at(i)->origInd = i;
+        sncs.at(i)->origInd = i;
+    }
+}
+
 void Node::sortNCS(){
     qSort( sncs.begin(), sncs.end(), edgeCompare );
 }

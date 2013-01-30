@@ -47,7 +47,7 @@
      <string>Screenshot</string>
     </property>
     <addaction name="actionSave_screenshot"/>
-    <addaction name="actionSave_screenshot_double_reolution"/>
+    <addaction name="actionSave_screenshot_double_resolution"/>
    </widget>
    <widget class="QMenu" name="menuViews">
     <property name="title">
@@ -77,9 +77,12 @@
     <string>save screenshot</string>
    </property>
   </action>
-  <action name="actionSave_screenshot_double_reolution">
+  <action name="actionSave_screenshot_double_resolution">
    <property name="text">
-    <string>save screenshot (double reolution)</string>
+    <string>save screenshot (double resolution)</string>
+   </property>
+   <property name="toolTip">
+    <string>save screenshot (double resolution)</string>
    </property>
   </action>
   <action name="actionRight_overlay">

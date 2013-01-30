@@ -78,10 +78,6 @@ QVector3D Data::min(){
 //TODO: Remove stuffalpha...
 void Data::paintGL(DisplayParameters* dp, bool shift, bool allNodes){
 
-    qDebug() << "paintGL in data";
-
-    //if (sl) qDebug() << "in data: " << sl->selected;
-
     if (surfset&&shift) glTranslatef(surfset->piv.x(),surfset->piv.y(),surfset->piv.z());
 
     glEnable(GL_BLEND);
@@ -150,6 +146,11 @@ void Data::setAlpha(double brainAlpha){
 void Data::setMinlength(double minlength){
     if (surfset) surfset->minlength = minlength;
     if (surfsetr) surfsetr->minlength = minlength;
+}
+
+void Data::minlFrom(int minlSource){
+    if (surfset) surfset->minSpace = minlSource;
+    if (surfsetr) surfsetr->minSpace = minlSource;
 }
 
 void Data::switchToSurface(int i){

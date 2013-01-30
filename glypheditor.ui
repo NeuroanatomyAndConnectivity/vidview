@@ -297,9 +297,9 @@
   <widget class="QComboBox" name="colorBox">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>138</x>
      <y>660</y>
-     <width>141</width>
+     <width>121</width>
      <height>27</height>
     </rect>
    </property>
@@ -307,9 +307,9 @@
   <widget class="QComboBox" name="displayBox">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>9</x>
      <y>660</y>
-     <width>141</width>
+     <width>121</width>
      <height>27</height>
     </rect>
    </property>
@@ -317,9 +317,9 @@
   <widget class="QComboBox" name="geoBox">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>268</x>
      <y>660</y>
-     <width>141</width>
+     <width>121</width>
      <height>27</height>
     </rect>
    </property>
@@ -327,7 +327,7 @@
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>50</x>
      <y>690</y>
      <width>51</width>
      <height>17</height>
@@ -340,7 +340,7 @@
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>180</x>
      <y>690</y>
      <width>41</width>
      <height>17</height>
@@ -353,7 +353,7 @@
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
-     <x>380</x>
+     <x>298</x>
      <y>690</y>
      <width>67</width>
      <height>17</height>
@@ -467,6 +467,29 @@
    </property>
    <property name="orientation">
     <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="minlengthPickBox">
+   <property name="geometry">
+    <rect>
+     <x>398</x>
+     <y>660</y>
+     <width>120</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
+    <rect>
+     <x>414</x>
+     <y>690</y>
+     <width>81</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Min. length</string>
    </property>
   </widget>
  </widget>

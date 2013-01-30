@@ -55,6 +55,8 @@ int main(int argc, char *argv[])
             ("geometry", po::value<int>(), "number of surface in surface set that determines the geometric distribution of the glyph primitives")
             ("glyphstyle", po::value<int>(), "0 = geometry, 1 = projection, 2 = pie charts")
             ("primitives", po::value<int>(), "0 = points, 1 = vectors")
+            ("minlength", po::value<float>(), "length threshold for removal of short edges")
+            ("minlsource", po::value<int>(), "number of surface in surface set used for the calculation of length for short edge removal")
             ;
 
     po::variables_map vm;
@@ -91,25 +93,25 @@ int main(int argc, char *argv[])
     if (vm.count("clipthreshold")) clipthr = vm["clipthreshold"].as<float>();
     glw->loadData(qsurfsetl,qsurfsetr,qscons, qoverlayl, qoverlayr, clipthr);
     qDebug() <<   "data loaded...";
-    w.show();
     if (qview!="") glw->loadView(qview);
 
     DisplayParameters* dp = new DisplayParameters(NULL, Qt::Window);
     dp->setWindowTitle("Display Options");
     dp->setVM(vm, desc);
     glw->setDisplayParameters(dp);
-    dp->show();
 
     GlyphEditor* ge = new GlyphEditor(NULL,Qt::Window);
     ge->setWindowTitle("Glyph Options");
     ge->setData(glw->data,dp);
-    //TODO: default parameters
     ge->initParams();
     ge->setVM(vm, desc);
-    ge->show();
 
     QObject::connect(ge,SIGNAL(changed()),glw,SLOT(updateParameters()));
     QObject::connect(glw,SIGNAL(selected()),ge->findChild<GLGlyphView*>("widget"),SLOT(updateGL()));
+    ge->show();
+    dp->show();
+    w.show();
+
 
     return a.exec();
 

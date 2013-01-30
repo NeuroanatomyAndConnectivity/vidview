@@ -102,28 +102,23 @@ void SConnections::createNodes(QList<QVector3D>* allNodes, int offset){
         Node* n1 = new Node(acon->fn);
 
         if (dnv->at(f)==NULL) {
-            n1->ncs << acon;
-            n1->sncs << acon;
             dnv->replace(f,n1);
-        } else {
-            dnv->at(f)->ncs << acon;
-            dnv->at(f)->sncs << acon;
         }
+        dnv->at(f)->ncs << acon;
+        dnv->at(f)->sncs << acon;
 
         acon = new Connection(allNodes->at(t), allNodes->at(f),v);
 
         Node* n2 = new Node(acon->fn);
 
         if (dnv->at(t)==NULL) {
-            n2->ncs << acon;
-            n2->sncs << acon;
             dnv->replace(t,n2);
-        } else {
-            dnv->at(t)->ncs << acon;
-            dnv->at(t)->sncs << acon;
         }
+        dnv->at(t)->ncs << acon;
+        dnv->at(t)->sncs << acon;
     }
     qDebug() << "before putting nodes in dn";
+    qDebug() << nodes.size();
     for (int i = 0; i<nodes.size(); i++){
         if (dnv->at(i+offset)!=NULL){
             dn << *dnv->at(i+offset);
@@ -131,6 +126,8 @@ void SConnections::createNodes(QList<QVector3D>* allNodes, int offset){
     }
     //qDebug() << "before sorting nodes";
     for (int i = 0; i<dn.length(); i++){
+        //after this, sncs should be sorted by color, but contain the original indexing...
+        dn[i].indexCons();
         dn[i].sortNCS();
     }
     delete dnv;

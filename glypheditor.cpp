@@ -24,12 +24,14 @@ void GlyphEditor::setData(Data* data, DisplayParameters* dp){
     QComboBox* col = findChild<QComboBox*>("colorBox");
     QComboBox* disp = findChild<QComboBox*>("displayBox");
     QComboBox* geoBox = findChild<QComboBox*>("geoBox");
+    QComboBox* minlBox = findChild<QComboBox*>("minlengthPickBox");
     for (int i = 0; i<data->surfset->afnis.length();i++){
         AFNISurface* afni = data->surfset->afnis.at(i);
         QString displayString = afni->filename;
         col->insertItem(i,displayString);
         disp->insertItem(i,displayString);
         geoBox->insertItem(i,displayString);
+        minlBox->insertItem(i,displayString);
     }
 }
 
@@ -48,6 +50,8 @@ void GlyphEditor::initParams(){
     setGeometry(0);
     setGlyphstyle(0);
     setPrimitives(0);
+    setMinlength(0);
+    setMinlSource(0);
 }
 
 void GlyphEditor::setVM(po::variables_map& vm, po::options_description& desc){
@@ -61,6 +65,11 @@ void GlyphEditor::setVM(po::variables_map& vm, po::options_description& desc){
     if (vm.count("geometry")) setGeometry(vm["geometry"].as<int>());
     if (vm.count("glyphstyle")) setGlyphstyle(vm["glyphstyle"].as<int>());
     if (vm.count("primitives")) setPrimitives(vm["primitives"].as<int>());
+    if (vm.count("minlength")) setMinlength(vm["minlength"].as<float>());
+    if (vm.count("minlsource")) {
+        setMinlSource(vm["minlsource"].as<int>());
+        qDebug() << "***** minlsource: " << minlSource;
+    }
 }
 
 void GlyphEditor::setThreshold(float value){
@@ -179,6 +188,15 @@ void GlyphEditor::setPrimitives(int p){
     update();
 }
 
+void GlyphEditor::setMinlSource(int ms){
+    minlSource = ms;
+    QComboBox* mlb = findChild<QComboBox*>("minlengthPickBox");
+    mlb->setCurrentIndex(minlSource);
+    qDebug() << "minlegth from: " << minlSource;
+    data->minlFrom(minlSource);
+    update();
+}
+
 void GlyphEditor::update(){
     GLWidget* glw = findChild<GLWidget*>("widget");
     glw->updateGL();
@@ -289,6 +307,8 @@ void GlyphEditor::on_saveButton_clicked()
     out << "geometry = " << geometry << endl;
     out << "glyphstyle = " << glyphstyle << endl;
     out << "primitives = " << primitives << endl;
+    out << "minlength = " << minlength << endl;
+    out << "minlSource = " << minlSource << endl;
 
     file.close();
 }
@@ -313,3 +333,8 @@ void GlyphEditor::on_updateBox_toggled(bool checked)
     if (checked) emit update();
 }
 
+
+void GlyphEditor::on_minlengthPickBox_activated(int index)
+{
+    setMinlSource(index);
+}

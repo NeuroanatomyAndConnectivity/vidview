@@ -99,9 +99,9 @@ void SurfaceSet::switchSurface(int i){
 }
 
 void SurfaceSet::paintGL(int ns, bool allNodes, bool connect, bool glyphsVisible){
-    qDebug() << "Surfaceset.paintGL()";
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST); //TODO: centralize that shit somewhere...
+    qDebug() << "cs: " << cs << "surfs: " << surfs << "clear_depth: " << clear_depth;
     surfs.at(cs)->paintGL();
     if (clear_depth) {
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -168,6 +168,7 @@ void SurfaceSet::paintNodes(int ns){
     //for all nodes in the current surface...
     for (int i = 0; i < ccs->dn.length(); i++){
         Node* p = (Node*)(&ccs->dn.at(i));
+        Node* mlp = (Node*)(&scons.at(minSpace)->dn.at(i));
         QVector3D nnormal = p->normal.normalized();
         QMatrix4x4* view = viewMatrix();
         QVector3D mapped = view->mapVector(nnormal);
@@ -182,8 +183,8 @@ void SurfaceSet::paintNodes(int ns){
             //How many connections have a value above the threshold?
             //TODO: Change p to whatever makes sense, make conditional on pies? move?
             int cOver = 0;
-            for (int count = 0; count < p->sncs.length(); count++){
-                if ((p->sncs.at(count)->v > threshold)) cOver++;
+            for (int count = 0; count < p->ncs.length(); count++){
+                if ((p->ncs.at(count)->v > threshold) && (mlp->ncs.at(count)->length()>minlength)) cOver++;
             }
             int nth = 0; //the how-manieth drawn connection for the pie chart...
             QVector3D zshift = glyphRadius*invRotZ;
@@ -203,9 +204,8 @@ void SurfaceSet::paintNodes(int ns){
                 Node* colorNode = (Node*)(&scons.at(colorsFrom)->dn.at(i));
                 Connection* c = colorNode->ncs.at(j);
                 glColor4f(c->r,c->g,c->b,glyphAlpha);
-                bool draw = !((c->v < threshold));
+                bool draw = ((c->v > threshold) && (c->length()>minlength));//TODO: use minSpace
                 if (billboarding && (ns==6)) {
-                    //TODO: check, this used to be restricted to spherical...
                     diff = diffc->tn;
                     QVector2D xy(diff.x(),diff.y());
                     xy /= 100;
@@ -217,32 +217,27 @@ void SurfaceSet::paintNodes(int ns){
                 Connection* pieEdge = colorNode->sncs.at(j);
                 if (ns==4) {
                     //pie charts
-                    //TODO: redundant:
-                    if ((pieEdge->v > threshold)) {
+                    draw = ((pieEdge->v > threshold) && (mlp->ncs.at(pieEdge->origInd)->length()>minlength)); //my brain hurts...
+                    if (draw) {
+                        if (nth==1) {
+                            cr = pieEdge->r;
+                            cg = pieEdge->g;
+                            cb = pieEdge->b;
+                        }
                         glColor4f(pieEdge->r,pieEdge->g,pieEdge->b,glyphAlpha);
-                        //float t = (j/(float)p->ncs.length())*2*M_PI;
                         float t = (nth/(float)cOver)*2*M_PI;
                         nth++;
-                        float rad = norm*glyphRadius + (1-norm)*glyphRadius*qSqrt(cOver)/10.0;
+                        float rad = norm*glyphRadius/3 + (1-norm)*glyphRadius*qSqrt(cOver)/30.0;
                         diff = rad*qSin(t)*invRotX + rad*qCos(t)*invRotY;
                     }
                 }
                 QVector3D p_shifted = p->p + diff;
-                //TODO: There is no more reason that this stuff couldn't go further up? Also: The flow here is seriously off...
+                if ((nth==1) && draw && (ns==4)) pieClosePoint = QVector3D(p_shifted.x()+zshift.x(),p_shifted.y()+zshift.y(),p_shifted.z()+zshift.z());
                 if (!vectors){
                     glBegin(GL_POINTS);
                 } else if (ns!=4){
                     glBegin(GL_LINES);
                     if (draw) glVertex3d(p->p.x()+zshift.x(),p->p.y()+zshift.y(),p->p.z()+zshift.z());
-                }
-                if (ns==4) {
-                    draw = ((pieEdge->v > threshold));
-                    if ((nth==1)&draw) {
-                        cr = pieEdge->r;
-                        cg = pieEdge->g;
-                        cb = pieEdge->b;
-                        pieClosePoint = QVector3D(p_shifted.x()+zshift.x(),p_shifted.y()+zshift.y(),p_shifted.z()+zshift.z());
-                    }
                 }
                 if (draw) glVertex3d(p_shifted.x()+zshift.x(),p_shifted.y()+zshift.y(),p_shifted.z()+zshift.z());
                 if (ns!=4) glEnd();

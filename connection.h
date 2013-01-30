@@ -15,6 +15,8 @@ public:
 
     float r,g,b;
 
+    int origInd; //original Index (for access to same connection in different space)
+
     double length();
 
 };

@@ -171,3 +171,4 @@ void MainWindow::on_actionClear_Right_ROI_triggered()
     GLWidget* glw = centralWidget()->findChild<GLWidget*>("widget");
     if (glw->data->surfsetr) glw->data->surfsetr->roi->clear();
 }
+

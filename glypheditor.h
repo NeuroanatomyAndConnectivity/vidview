@@ -17,7 +17,7 @@ public:
     ~GlyphEditor();
 
     float threshold, radius, normalization, size, minlength;
-    int display, color, geometry, glyphstyle, primitives;
+    int display, color, geometry, glyphstyle, primitives, minlSource;
 
     void setThreshold(float value);
     void setRadius(float value);
@@ -29,7 +29,7 @@ public:
     void setGlyphstyle(int g);
     void setPrimitives(int p);
     void setMinlength(float value);
-
+    void setMinlSource(int ms);
     void initParams();
     void setData(Data* data, DisplayParameters* dp);
     Data* data;
@@ -78,6 +78,8 @@ private slots:
     void on_minlengthSlider_valueChanged(int value);
 
     void on_minlengthBox_valueChanged(double arg1);
+
+    void on_minlengthPickBox_activated(int index);
 
 signals:
     void changed();

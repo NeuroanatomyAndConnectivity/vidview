@@ -21,6 +21,7 @@ public:
     int cs; //current surface
     int colorsFrom; //current color
     int geo; //current glyph geometry
+    int minSpace; //space in which length threshold is calculated
     float norm; //normalization of glyphs
     double size; //glSize for primitive drawing
 

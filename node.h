@@ -20,6 +20,7 @@ public:
 
     QVector3D normal;
 
+    void indexCons();
     void sortNCS();
 
     bool operator ==(Node const& n);
