@@ -308,7 +308,7 @@ void GlyphEditor::on_saveButton_clicked()
     out << "glyphstyle = " << glyphstyle << endl;
     out << "primitives = " << primitives << endl;
     out << "minlength = " << minlength << endl;
-    out << "minlSource = " << minlSource << endl;
+    out << "minlsource = " << minlSource << endl;
 
     file.close();
 }

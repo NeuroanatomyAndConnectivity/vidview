@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     string overlayl;
     string overlayr;
     string view;
+    string screenshotname;
 
     // Declare the supported options.
     po::options_description desc("Allowed options");
@@ -56,7 +57,9 @@ int main(int argc, char *argv[])
             ("glyphstyle", po::value<int>(), "0 = geometry, 1 = projection, 2 = pie charts")
             ("primitives", po::value<int>(), "0 = points, 1 = vectors")
             ("minlength", po::value<float>(), "length threshold for removal of short edges")
+            ("sresolution", po::value<float>(), "resolution multiplication factor for screenshots")
             ("minlsource", po::value<int>(), "number of surface in surface set used for the calculation of length for short edge removal")
+            ("screenshot", po::value<string>(&screenshotname), "make screenshot and exit")
             ;
 
     po::variables_map vm;
@@ -88,12 +91,12 @@ int main(int argc, char *argv[])
     QString qoverlayl(overlayl.c_str());
     QString qoverlayr(overlayr.c_str());
     QString qview(view.c_str());
+    QString qscreenshotname(screenshotname.c_str());
     qDebug() << "loading data: " << qsurfsetl << qsurfsetr << qscons << qoverlayl << qoverlayr;
     float clipthr = 0.7;
     if (vm.count("clipthreshold")) clipthr = vm["clipthreshold"].as<float>();
     glw->loadData(qsurfsetl,qsurfsetr,qscons, qoverlayl, qoverlayr, clipthr);
     qDebug() <<   "data loaded...";
-    if (qview!="") glw->loadView(qview);
 
     DisplayParameters* dp = new DisplayParameters(NULL, Qt::Window);
     dp->setWindowTitle("Display Options");
@@ -112,6 +115,19 @@ int main(int argc, char *argv[])
     dp->show();
     w.show();
 
+    if (qview!="") {
+        qDebug() << "loading view: " << qview;
+        glw->loadView(qview);
+    }
+
+    if (vm.count("screenshot")){
+        if (vm.count("sresolution")){
+            glw->screenshot(qscreenshotname,vm["sresolution"].as<float>());
+        } else {
+            glw->screenshot(qscreenshotname);
+        }
+        return 0;
+    }
 
     return a.exec();
 

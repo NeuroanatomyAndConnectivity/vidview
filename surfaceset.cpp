@@ -106,10 +106,11 @@ void SurfaceSet::paintGL(int ns, bool allNodes, bool connect, bool glyphsVisible
     if (clear_depth) {
         glClear(GL_DEPTH_BUFFER_BIT);
     }
-    if (connect) paintConnectivity();
-    paintROI();
+    if (connect) paintConnectivity(threshold);
     glDisable(GL_LIGHTING);
     if (glyphsVisible) paintBufferedNodes(ns);
+    //glClear(GL_DEPTH_BUFFER_BIT);
+    paintROI();
     glEnable(GL_LIGHTING);
 }
 
@@ -126,15 +127,15 @@ void SurfaceSet::paintBufferedNodes(int ns){
     paintNodes(ns);
 }
 
-void SurfaceSet::paintConnectivity(){
+void SurfaceSet::paintConnectivity(double threshold){
     glColor3f(1,0,0);
     qDebug() << "selectedIndex: " << selectedIndex;
     if (conn){
         qDebug() << afnis.at(0)->nodes.length();
         for (int i = 0; i < afnis.at(0)->nodes.length(); i++){
-            float r = 20*conn->conn[i][selectedIndex];
-            if (r>0) {
-                glPointSize(r);
+            float r = conn->conn[i][selectedIndex];
+            if ((r>threshold) && (r<1)) {
+                glPointSize(r*20);
                 //qDebug() << i << r;
                 glBegin(GL_POINTS);
                 QVector3D p = afnis.at(cs)->nodes.at(i);
@@ -148,8 +149,8 @@ void SurfaceSet::paintConnectivity(){
 }
 
 void SurfaceSet::paintROI(){
-    glColor3f(0,1,0);
-    glPointSize(10);
+    glColor3f(0,0,0);
+    glPointSize(15);
     glBegin(GL_POINTS);
     for (int i = 0; i < afnis.at(0)->nodes.length(); i++){
         QVector3D p = afnis.at(cs)->nodes.at(i);

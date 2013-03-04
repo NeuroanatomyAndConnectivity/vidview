@@ -36,7 +36,7 @@ public:
     void paintGL(int ns, bool allNodes=false, bool connect=false, bool glyphsVisible=true);
     void paintNodes(int ns);
     void paintBufferedNodes(int ns);
-    void paintConnectivity();
+    void paintConnectivity(double threshold=0);
     double glyphAlpha, glyphRadius, threshold, minlength;
     void setGlyphAlpha(double a);
     void setGlyphRadius(double r);
